@@ -1,4 +1,3 @@
-// ProfilePage.tsx
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Typography, Button, Grid, Card, CardContent, CardHeader, TextField } from '@mui/material';
@@ -78,7 +77,6 @@ const ProfilePage: React.FC = () => {
     }
   };
 
-
   const handleImageDelete = () => {
     if (userInfo) {
       const updatedUser = { ...userInfo, profileImage: null };
@@ -87,88 +85,86 @@ const ProfilePage: React.FC = () => {
     }
   };
 
-
   const handleLogout = () => {
     if (window.confirm("¿Estás seguro de que deseas cerrar sesión?")) {
       localStorage.removeItem('userEmail');
       navigate('/login');
     }
   };
+
   const handleExportPDF = () => {
     const doc = new jsPDF();
     const pageWidth = doc.internal.pageSize.width;
     const margin = 20;
     const maxWidth = pageWidth - 2 * margin;
     let yPosition = 20;
-  
+
     const addText = (text: string, size: number = 12, yOffset: number = 0) => {
       doc.setFontSize(size);
       const lines = doc.splitTextToSize(text, maxWidth);
       doc.text(lines, margin, yPosition + yOffset);
       return lines.length * 7;
     };
-  
-   // Título personalizado
-  doc.setFontSize(16);
-  doc.text(cvTitle, pageWidth / 2, yPosition, { align: "center" });
-  yPosition += 1;
-  
+
+    // Título personalizado
+    doc.setFontSize(16);
+    doc.text(cvTitle, pageWidth / 2, yPosition, { align: "center" });
+    yPosition += 1;
+
     // Foto redonda y email al lado derecho
     if (userInfo?.profileImage) {
       // Primero, hacemos la foto redonda
       const photoSize = 50;
       const photoX = margin;
       const photoY = yPosition + 20;
-  
+
       // Dibuja un círculo blanco donde irá la foto
       doc.setFillColor(255, 255, 255); // Blanco
       doc.circle(photoX + photoSize / 2, photoY + photoSize / 2, photoSize / 2, 'F'); // Círculo relleno
-  
+
       // Ahora agregamos la imagen recortada en forma circular
       doc.addImage(userInfo.profileImage, 'JPEG', photoX, photoY, photoSize, photoSize, undefined, 'SLOW'); // Slow para mejorar la calidad
-  
+
       // Agregar el email a la derecha de la foto
       const emailX = photoX + photoSize + 10; // 10px de separación entre la foto y el email
       doc.setFontSize(12);
       doc.text(`Email: ${userInfo?.email}`, emailX, yPosition + 40); // Alineamos el email al lado de la foto
       yPosition += 70; // Espaciamos un poco más para la siguiente sección
     }
-  
+
     doc.setDrawColor(0);
     doc.line(margin, yPosition, pageWidth - margin, yPosition);
     yPosition += 5;
-  
+
     // Descripción
     yPosition += addText("Acerca de", 14, 10);
     yPosition += addText(newDescription || 'No disponible', 12, 10);
     yPosition += 5;
-  
+
     // Divisores
     doc.line(margin, yPosition, pageWidth - margin, yPosition);
     yPosition += 5;
-  
+
     // Tecnología
     yPosition += addText("Tecnología", 14, 10);
     yPosition += addText(technology || 'No disponible', 12, 10);
     yPosition += 5;
-  
+
     doc.line(margin, yPosition, pageWidth - margin, yPosition);
     yPosition += 5;
-  
+
     // Descripción de Tecnología
     yPosition += addText("Descripción de Tecnología", 14, 10);
     yPosition += addText(techDescription || 'No disponible', 12, 10);
     yPosition += 5;
-  
+
     // Experiencia
     yPosition += addText("Experiencia", 14, 10);
     yPosition += addText(experience || 'No disponible', 12, 10);
     yPosition += 5;
-  
+
     doc.save("perfil_usuario.pdf");
   };
-  
-  
 
   return (
     <Box sx={{ textAlign: 'center', paddingTop: 5 }}>
@@ -176,30 +172,43 @@ const ProfilePage: React.FC = () => {
         <Typography variant="body1">Cargando perfil...</Typography>
       ) : userInfo ? (
         <>
-          <Typography variant="h4" gutterBottom>
-            Bienvenido, {userInfo.email}
-          </Typography>
-          
+          <Typography
+  variant="h4"
+  gutterBottom
+  sx={{
+    wordWrap: 'break-word', // Rompe la palabra si es necesario
+    overflow: 'hidden', // Evita que el texto se desborde
+    textOverflow: 'ellipsis', // Muestra puntos suspensivos si el texto es demasiado largo
+    fontSize: { xs: '1.5rem', sm: '2rem', md: '2.5rem' }, // Ajuste dinámico del tamaño de la fuente
+    textAlign: 'center', // Centrar el texto en la pantalla
+  }}
+>
+  Bienvenido, {userInfo.email}
+</Typography>
+
+
           <ProfileImage 
             profileImage={userInfo.profileImage} 
             onImageChange={handleImageChange} 
             onImageDelete={handleImageDelete}  // Pasamos el método de eliminar la imagen
           />
+
           {/* Descripción */}
           <EditableField
-  label="Perfíl Profesional" // Este es el nuevo campo que hemos agregado
-  value={cvTitle} // Esta es la variable donde guardamos el título del CV
-  onChange={(e) => setCvTitle(e.target.value)} // Actualizamos el título del CV
-  isEditing={isEditing}
-/>
+            label="Perfíl Profesional"
+            value={cvTitle}
+            onChange={(e) => setCvTitle(e.target.value)}
+            isEditing={isEditing}
+          />
 
-           {/* Campo de Descripción */}
-    <EditableField
-      label="Descripción"
-      value={newDescription}
-      onChange={(e) => setNewDescription(e.target.value)}
-      isEditing={isEditing}
-    />
+          {/* Campo de Descripción */}
+          <EditableField
+            label="Descripción"
+            value={newDescription}
+            onChange={(e) => setNewDescription(e.target.value)}
+            isEditing={isEditing}
+          />
+
           {/* Cards editables en el centro */}
           <Grid container spacing={2} justifyContent="center" sx={{ marginTop: 2 }}>
             <Grid item xs={12} sm={6} md={3} sx={{ marginBottom: 2 }}>
@@ -262,8 +271,8 @@ const ProfilePage: React.FC = () => {
               </Card>
             </Grid>
 
-            <Grid item xs={12} sm={6} md={3} >
-              <Card sx={{ display: 'flex', flexDirection: 'column', minHeight: 180,  }}>
+            <Grid item xs={12} sm={6} md={3}>
+              <Card sx={{ display: 'flex', flexDirection: 'column', minHeight: 180 }}>
                 <CardHeader title="Certificados" />
                 <CardContent sx={{ flex: 1 }}>
                   {isEditing ? (
@@ -284,7 +293,7 @@ const ProfilePage: React.FC = () => {
           </Grid>
 
           {/* Campo de experiencia fuera de las cards, al igual que la descripción */}
-          <EditableField label="Experiencia" value={experience} onChange={(e) => setExperience(e.target.value)} isEditing={isEditing}/>
+          <EditableField label="Experiencia" value={experience} onChange={(e) => setExperience(e.target.value)} isEditing={isEditing} />
 
           {/* Botones de acción */}
           <Grid container spacing={2} justifyContent="center" sx={{ marginTop: 3 }}>

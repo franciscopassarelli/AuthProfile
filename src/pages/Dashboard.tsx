@@ -1,6 +1,7 @@
 // src/pages/Dashboard.tsx
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Box, Typography, Button, Container } from '@mui/material';
 
 const Dashboard: React.FC = () => {
   const [user, setUser] = useState<string | null>(null);
@@ -31,10 +32,27 @@ const Dashboard: React.FC = () => {
   };
 
   return (
-    <div>
-      <h1>Bienvenido, {user}</h1>
-      <button onClick={handleLogout}>Cerrar sesión</button>
-    </div>
+    <Container sx={{ textAlign: 'center', paddingTop: 4 }}>
+      <Box sx={{ marginBottom: 3 }}>
+        <Typography variant="h4" gutterBottom>
+          Bienvenido, {user}
+        </Typography>
+        <Typography variant="h6" color="textSecondary">
+          ¡Aquí tienes acceso a tu dashboard!
+        </Typography>
+      </Box>
+
+      <Box sx={{ marginTop: 4 }}>
+        <Button 
+          variant="contained" 
+          color="secondary" 
+          onClick={handleLogout} 
+          sx={{ padding: '10px 20px', fontSize: '1rem' }}
+        >
+          Cerrar sesión
+        </Button>
+      </Box>
+    </Container>
   );
 };
 

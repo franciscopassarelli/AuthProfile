@@ -37,10 +37,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const login = (username: string) => {
     setUser(username);
+    localStorage.setItem('userEmail', username); // Guardamos el usuario en localStorage
   };
 
   const logout = () => {
     setUser(null);
+    localStorage.removeItem('userEmail'); // Eliminamos el usuario de localStorage
   };
 
   return (

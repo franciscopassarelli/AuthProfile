@@ -104,7 +104,7 @@ const Signup: React.FC = () => {
       </form>
 
       {/* Enlace para recuperación de contraseña */}
-      <Typography variant="body2" sx={{ marginTop: 2 }}>
+      <Typography variant="body2" sx={{ marginTop: 2}}>
         <Link href="/forgot-password" underline="hover">
           ¿Olvidaste tu contraseña?
         </Link>

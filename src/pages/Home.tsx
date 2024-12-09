@@ -1,4 +1,3 @@
-// src/pages/Home.tsx
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Box, Button, Typography, Container } from '@mui/material';
@@ -15,12 +14,19 @@ const Home: React.FC = () => {
         </Typography>
       </Box>
 
-      <Box sx={{ marginBottom: 3 }}>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: { xs: 'column', sm: 'row' },  // Cambiar a columna en pantallas pequeñas
+          justifyContent: 'center',
+          gap: 2,  // Esto agrega espacio entre los botones
+          marginBottom: 3,
+        }}
+      >
         <Button
           variant="contained"
           color="primary"
           size="large"
-          sx={{ marginRight: 2 }}
           component={Link}
           to="/login"
         >
