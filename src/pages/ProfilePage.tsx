@@ -78,6 +78,16 @@ const ProfilePage: React.FC = () => {
     }
   };
 
+
+  const handleImageDelete = () => {
+    if (userInfo) {
+      const updatedUser = { ...userInfo, profileImage: null };
+      localStorage.setItem(userInfo.email, JSON.stringify(updatedUser));
+      setUserInfo(updatedUser);
+    }
+  };
+
+
   const handleLogout = () => {
     if (window.confirm("¿Estás seguro de que deseas cerrar sesión?")) {
       localStorage.removeItem('userEmail');
@@ -170,8 +180,11 @@ const ProfilePage: React.FC = () => {
             Bienvenido, {userInfo.email}
           </Typography>
           
-          <ProfileImage profileImage={userInfo.profileImage} onImageChange={handleImageChange} />
-
+          <ProfileImage 
+            profileImage={userInfo.profileImage} 
+            onImageChange={handleImageChange} 
+            onImageDelete={handleImageDelete}  // Pasamos el método de eliminar la imagen
+          />
           {/* Descripción */}
           <EditableField
   label="Perfíl Profesional" // Este es el nuevo campo que hemos agregado
