@@ -21,7 +21,13 @@ const ProfileImage: React.FC<ProfileImageProps> = ({ profileImage, onImageChange
         boxShadow: '0 0 10px rgba(0, 0, 0, 0.5)',
       }}
     />
-    <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2, justifyContent: 'center' }}>
+    <Box sx={{ 
+      display: 'flex', 
+      flexDirection: 'row', 
+      gap: 2, 
+      justifyContent: 'center',
+      marginTop: 3,  // Agregar margen para alejar los botones de la imagen
+    }}>
       <Button
         variant="outlined"
         component="label"

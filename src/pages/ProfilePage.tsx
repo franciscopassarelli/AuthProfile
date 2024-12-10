@@ -186,12 +186,17 @@ const ProfilePage: React.FC = () => {
   Bienvenido, {userInfo.email}
 </Typography>
 
-
-          <ProfileImage 
+<Box sx={{ textAlign: 'center', paddingTop: 5, marginBottom: 4 }}>
+<ProfileImage 
             profileImage={userInfo.profileImage} 
             onImageChange={handleImageChange} 
             onImageDelete={handleImageDelete}  // Pasamos el método de eliminar la imagen
           />
+</Box>
+
+
+
+        
 
           {/* Descripción */}
           <EditableField
