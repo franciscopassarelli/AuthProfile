@@ -146,7 +146,7 @@ const ProfilePage: React.FC = () => {
     yPosition += 5;
 
     // Tecnología
-    yPosition += addText("Tecnología", 14, 10);
+    yPosition += addText("Tecnologías", 14, 10);
     yPosition += addText(technology || 'No disponible', 12, 10);
     yPosition += 5;
 
@@ -154,7 +154,7 @@ const ProfilePage: React.FC = () => {
     yPosition += 5;
 
     // Descripción de Tecnología
-    yPosition += addText("Descripción de Tecnología", 14, 10);
+    yPosition += addText("Educación", 14, 10);
     yPosition += addText(techDescription || 'No disponible', 12, 10);
     yPosition += 5;
 
@@ -208,7 +208,7 @@ const ProfilePage: React.FC = () => {
 
           {/* Campo de Descripción */}
           <EditableField
-            label="Descripción"
+            label="Resumen Profesional"
             value={newDescription}
             onChange={(e) => setNewDescription(e.target.value)}
             isEditing={isEditing}
@@ -218,7 +218,7 @@ const ProfilePage: React.FC = () => {
           <Grid container spacing={2} justifyContent="center" sx={{ marginTop: 2 }}>
             <Grid item xs={12} sm={6} md={3} sx={{ marginBottom: 2 }}>
               <Card sx={{ display: 'flex', flexDirection: 'column', minHeight: 180 }}>
-                <CardHeader title="Tecnología" />
+                <CardHeader title="Tecnologías" />
                 <CardContent sx={{ flex: 1 }}>
                   {isEditing ? (
                     <TextField
@@ -238,7 +238,7 @@ const ProfilePage: React.FC = () => {
 
             <Grid item xs={12} sm={6} md={3}>
               <Card sx={{ display: 'flex', flexDirection: 'column', minHeight: 180 }}>
-                <CardHeader title="Descripción de Tecnología" />
+                <CardHeader title="Educación" />
                 <CardContent sx={{ flex: 1 }}>
                   {isEditing ? (
                     <TextField
