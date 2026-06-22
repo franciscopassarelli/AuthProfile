@@ -63,7 +63,7 @@ export const PDFDocument = ({ data }: { data: any }) => (
     .filter((line: string) => line.trim() !== '') // Esto evita que imprima puntos vacíos
     .map((line: string, index: number) => (
       <BulletPoint key={index}>
-        {line.replace(/^[•\-\*]\s*/, '')}
+        {line.replace(/^[•*-]\s*/, '')}
       </BulletPoint>
     ))
 ) : (
