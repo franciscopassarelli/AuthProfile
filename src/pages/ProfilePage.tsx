@@ -1,9 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Typography, Button, Grid, Card, CardContent, CardHeader, TextField } from '@mui/material';
-import { jsPDF } from 'jspdf';
 import ProfileImage from '../components/profilecomponents/ProfileImage';
 import EditableField from '../components/profilecomponents/EditableField';
+
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import { PDFDocument } from '../components/PDFDocument';
+
 
 const ProfilePage: React.FC = () => {
   const [userInfo, setUserInfo] = useState<any>(null);
@@ -14,7 +17,7 @@ const ProfilePage: React.FC = () => {
   const [skills, setSkills] = useState<string>('');
   const [certificates, setCertificates] = useState<string>('');
   const [experience, setExperience] = useState<string>('');
-  const [cvTitle, setCvTitle] = useState<string>(''); // Default title is 'CV'
+  const [cvTitle, setCvTitle] = useState<string>('');
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const navigate = useNavigate();
@@ -39,6 +42,18 @@ const ProfilePage: React.FC = () => {
       }
     }
   }, [navigate]);
+
+  const currentData = useMemo(() => ({
+  ...userInfo,
+  cvTitle,
+  description: newDescription,
+  technology,
+  techDescription,
+  skills,
+  certificates,
+  experience
+}), [userInfo, cvTitle, newDescription, technology, techDescription, skills, certificates, experience]);
+
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -92,79 +107,9 @@ const ProfilePage: React.FC = () => {
     }
   };
 
-  const handleExportPDF = () => {
-    const doc = new jsPDF();
-    const pageWidth = doc.internal.pageSize.width;
-    const margin = 20;
-    const maxWidth = pageWidth - 2 * margin;
-    let yPosition = 20;
+ 
 
-    const addText = (text: string, size: number = 12, yOffset: number = 0) => {
-      doc.setFontSize(size);
-      const lines = doc.splitTextToSize(text, maxWidth);
-      doc.text(lines, margin, yPosition + yOffset);
-      return lines.length * 7;
-    };
-
-    // Título personalizado
-    doc.setFontSize(16);
-    doc.text(cvTitle, pageWidth / 2, yPosition, { align: "center" });
-    yPosition += 1;
-
-    // Foto redonda y email al lado derecho
-    if (userInfo?.profileImage) {
-      // Primero, hacemos la foto redonda
-      const photoSize = 50;
-      const photoX = margin;
-      const photoY = yPosition + 20;
-
-      // Dibuja un círculo blanco donde irá la foto
-      doc.setFillColor(255, 255, 255); // Blanco
-      doc.circle(photoX + photoSize / 2, photoY + photoSize / 2, photoSize / 2, 'F'); // Círculo relleno
-
-      // Ahora agregamos la imagen recortada en forma circular
-      doc.addImage(userInfo.profileImage, 'JPEG', photoX, photoY, photoSize, photoSize, undefined, 'SLOW'); // Slow para mejorar la calidad
-
-      // Agregar el email a la derecha de la foto
-      const emailX = photoX + photoSize + 10; // 10px de separación entre la foto y el email
-      doc.setFontSize(12);
-      doc.text(`Email: ${userInfo?.email}`, emailX, yPosition + 40); // Alineamos el email al lado de la foto
-      yPosition += 70; // Espaciamos un poco más para la siguiente sección
-    }
-
-    doc.setDrawColor(0);
-    doc.line(margin, yPosition, pageWidth - margin, yPosition);
-    yPosition += 5;
-
-    // Descripción
-    yPosition += addText("Acerca de", 14, 10);
-    yPosition += addText(newDescription || 'No disponible', 12, 10);
-    yPosition += 5;
-
-    // Divisores
-    doc.line(margin, yPosition, pageWidth - margin, yPosition);
-    yPosition += 5;
-
-    // Tecnología
-    yPosition += addText("Tecnologías", 14, 10);
-    yPosition += addText(technology || 'No disponible', 12, 10);
-    yPosition += 5;
-
-    doc.line(margin, yPosition, pageWidth - margin, yPosition);
-    yPosition += 5;
-
-    // Descripción de Tecnología
-    yPosition += addText("Educación", 14, 10);
-    yPosition += addText(techDescription || 'No disponible', 12, 10);
-    yPosition += 5;
-
-    // Experiencia
-    yPosition += addText("Experiencia", 14, 10);
-    yPosition += addText(experience || 'No disponible', 12, 10);
-    yPosition += 5;
-
-    doc.save("perfil_usuario.pdf");
-  };
+ 
 
   return (
     <Box sx={{ textAlign: 'center', paddingTop: 5 }}>
@@ -193,11 +138,6 @@ const ProfilePage: React.FC = () => {
             onImageDelete={handleImageDelete}  // Pasamos el método de eliminar la imagen
           />
 </Box>
-
-
-
-        
-
           {/* Descripción */}
           <EditableField
             label="Perfíl Profesional"
@@ -313,12 +253,19 @@ const ProfilePage: React.FC = () => {
                 </Button>
               )}
             </Grid>
-
-            <Grid item>
-              <Button variant="contained" color="primary" onClick={handleExportPDF}>
-                Exportar a PDF
-              </Button>
-            </Grid>
+<Grid item>
+   <PDFDownloadLink 
+  document={<PDFDocument data={currentData} />} 
+  fileName={`${userInfo.email}_CV.pdf`}
+>
+  {({ blob, url, loading, error }) => 
+    <Button variant="contained" color="primary">
+      {loading ? 'Preparando...' : 'Descargar PDF'}
+    </Button>
+  }
+</PDFDownloadLink>
+</Grid>
+          
 
             <Grid item>
               <Button variant="contained" color="secondary" onClick={handleLogout}>
