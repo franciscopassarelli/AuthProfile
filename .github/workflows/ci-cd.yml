@@ -42,7 +42,7 @@ jobs:
         push: true
         tags: ${{ secrets.DOCKER_HUB_USERNAME }}/auth-profile:latest
 
-    # --- NUEVOS PASOS DE TERRAFORM EN EL PIPELINE ---
+    # --- PASOS DE TERRAFORM EN EL PIPELINE ---
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v3
 
@@ -50,6 +50,6 @@ jobs:
       run: terraform init
       working-directory: ./terraform
 
-    - name: Terraform Apply
-      run: terraform apply -auto-approve
+    - name: Validate Terraform Syntax
+      run: terraform validate
       working-directory: ./terraform
