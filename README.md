@@ -1,4 +1,4 @@
-# 🚀 AuthProfile - DevOps Pipeline & Infrastructure Project
+# 🚀 DevOps Platform Lab - DevOps Pipeline & Infrastructure Project
 
 Proyecto integral de DevOps implementado para una aplicación frontend, abarcando contenedorización, orquestación, infraestructura como código (IaC), automatización de CI/CD y observabilidad con monitoreo.
 
