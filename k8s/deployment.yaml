@@ -13,7 +13,8 @@ spec:
         app: auth-system
     spec:
       containers:
-      - name: auth-system
-        image: tu-usuario-dockerhub/auth-system:latest # ¡Cambia esto por tu repo de DockerHub!
-        ports:
-        - containerPort: 80
+        - name: auth-system
+          image: fpassarelli/authprofile:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 80
